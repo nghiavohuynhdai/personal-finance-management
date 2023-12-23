@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1F8BB444-554E-4E02-9C17-C017AF94A197}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "src\Api\Api.csproj", "{CFD4CCCC-7EA8-468C-9678-D7F7AE151DEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFD4CCCC-7EA8-468C-9678-D7F7AE151DEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD4CCCC-7EA8-468C-9678-D7F7AE151DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD4CCCC-7EA8-468C-9678-D7F7AE151DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD4CCCC-7EA8-468C-9678-D7F7AE151DEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CFD4CCCC-7EA8-468C-9678-D7F7AE151DEB} = {1F8BB444-554E-4E02-9C17-C017AF94A197}
+	EndGlobalSection
+EndGlobal
