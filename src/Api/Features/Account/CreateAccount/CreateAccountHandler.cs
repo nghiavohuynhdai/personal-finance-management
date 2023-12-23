@@ -1,0 +1,35 @@
+using Api.Exceptions;
+using FluentValidation;
+
+namespace Api.Features.Account.CreateAccount;
+
+public class CreateAccountHandler
+{
+    private readonly IAccountRepository _repository;
+    private readonly IValidator<CreateAccountRequest> _validator;
+
+    public CreateAccountHandler(IAccountRepository repository, IValidator<CreateAccountRequest> validator)
+    {
+        _repository = repository;
+        _validator = validator;
+    }
+
+    public async Task<Guid> Handle(CreateAccountRequest request, CancellationToken cancellationToken)
+    {
+        var validatedResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validatedResult.IsValid)
+        {
+            throw new BadRequestException(validatedResult.Errors[0].ErrorMessage);
+        }
+
+        var account = new Entities.Account
+        {
+            Name = request.Name,
+            Balance = request.Balance,
+            TotalLoan = request.TotalLoan
+        };
+
+        var accountId = await _repository.CreateAccountAsync(account, cancellationToken);
+        return accountId;
+    }
+}

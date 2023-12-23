@@ -1,4 +1,6 @@
+using System.Reflection;
 using Api.Setup;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,7 @@ builder.Services.AddCors(options =>
 builder.Services
     .AddDatabases()
     .AddRepositories()
+    .AddValidatorsFromAssembly(typeof(Program).Assembly)
     .AddHandlers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,7 +28,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.Services.MigrateDatabases();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -55,6 +58,8 @@ app.MapGet("/weatherforecast", () =>
     })
     .WithName("GetWeatherForecast")
     .WithOpenApi();
+
+app.UseApplicationMiddlewares();
 
 app.Run();
 

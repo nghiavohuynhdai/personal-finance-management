@@ -16,7 +16,7 @@
       "applicationUrl": "https://localhost:5000;http://localhost:3000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION_STRING": "Host=localhost;Database=postgres;Username=postgres;Password=Yourpassword;Maximum Pool Size=20"
+        "DB_CONNECTION_STRING": "Host=localhost;Database=postgres;Username=postgres;Password=Yourpassword;Maximum Pool Size=20;Search Path=personal_finance_management"
       }
     },
     "IIS Express": {

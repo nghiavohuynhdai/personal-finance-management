@@ -6,6 +6,7 @@ public static class ApplicationHandlers
 {
     public static IServiceCollection AddHandlers(this IServiceCollection service)
     {
+        service.AddTransient<CreateAccountHandler>();
         return service;
     }
 }

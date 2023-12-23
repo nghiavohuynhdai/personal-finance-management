@@ -16,31 +16,51 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure default schema
-        modelBuilder.HasDefaultSchema("public");
+        modelBuilder.HasDefaultSchema("personal_finance_management");
 
         // Map entity to table
         modelBuilder.Entity<Entity>(et =>
         {
             et.UseTpcMappingStrategy();
+
             et.HasKey(e => e.Id);
-            et.Property(e => e.Id).HasValueGenerator<GuidValueGenerator>();
+
+            et.Property(e => e.Id)
+                .HasValueGenerator<GuidValueGenerator>()
+                .HasColumnName("id");
+
+            et.Property(et => et.CreatedAt)
+                .HasColumnName("created_at");
+
+            et.Property(et => et.UpdatedAt)
+                .HasColumnName("updated_at");
+
+            et.Property(et => et.IsDeleted)
+                .HasColumnName("is_deleted");
         });
 
         modelBuilder.Entity<Account>(e =>
         {
             e.ToTable("accounts");
+
             e.Property(acc => acc.Name)
                 .HasColumnName("name")
                 .HasColumnType("varchar(100)")
                 .IsRequired();
+
+            e.HasIndex(acc => acc.Name)
+                .IsUnique();
+
             e.Property(acc => acc.Balance)
                 .HasColumnName("balance")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+
             e.Property(acc => acc.TotalLoan)
                 .HasColumnName("total_loan")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+
             e.Property(acc => acc.Status)
                 .HasColumnName("status")
                 .HasColumnType("varchar(20)")
@@ -48,8 +68,33 @@ public class ApplicationDbContext : DbContext
                 .IsRequired();
         });
     }
-    
+
     public override int SaveChanges()
+    {
+        OnBeforeSaving();
+        return base.SaveChanges();
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        OnBeforeSaving();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        OnBeforeSaving();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = default)
+    {
+        OnBeforeSaving();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    private void OnBeforeSaving()
     {
         var entries = ChangeTracker
             .Entries()
@@ -67,7 +112,5 @@ public class ApplicationDbContext : DbContext
                 ((Entity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
             }
         }
-
-        return base.SaveChanges();
     }
 }
