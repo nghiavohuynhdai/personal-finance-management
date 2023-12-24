@@ -14,7 +14,7 @@ public class CreateAccountHandler
         _validator = validator;
     }
 
-    public async Task<Guid> Handle(CreateAccountRequest request, CancellationToken cancellationToken)
+    public async Task<CreatedAccountData> Handle(CreateAccountRequest request, CancellationToken cancellationToken)
     {
         var validatedResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validatedResult.IsValid)
@@ -29,7 +29,9 @@ public class CreateAccountHandler
             TotalLoan = request.TotalLoan
         };
 
-        var accountId = await _repository.CreateAccountAsync(account, cancellationToken);
-        return accountId;
+        var createdAccountData = await _repository.CreateAccountAsync(account, cancellationToken);
+        return createdAccountData;
     }
+
+    public record CreatedAccountData(Guid Id);
 }

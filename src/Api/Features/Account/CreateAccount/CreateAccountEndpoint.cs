@@ -1,6 +1,7 @@
 using System.Net;
 using Api.Common;
 using Microsoft.AspNetCore.Mvc;
+using CreatedAccountData = Api.Features.Account.CreateAccount.CreateAccountHandler.CreatedAccountData;
 
 namespace Api.Features.Account.CreateAccount;
 
@@ -17,12 +18,12 @@ public class CreateAccountEndpoint
     }
 
     private static async Task<IResult> CreateAccount(
-        [FromBody] CreateAccountRequest request, CreateAccountHandler handler)
+        [FromBody] CreateAccountRequest request, CreateAccountHandler handler, CancellationToken cancellationToken)
     {
-        var accountId = await handler.Handle(request, CancellationToken.None);
-        var response = ResultResponse<CreatedAccountData>.Init(new CreatedAccountData(accountId), "");
-        return TypedResults.Json(response, statusCode: (int)HttpStatusCode.Created);
+        var createdAccountData = await handler.Handle(request, cancellationToken);
+        return TypedResults.Json(
+            ResultResponse<CreatedAccountData>.Init(createdAccountData, ""),
+            statusCode: (int)HttpStatusCode.Created
+        );
     }
-
-    private record CreatedAccountData(Guid Id);
 }

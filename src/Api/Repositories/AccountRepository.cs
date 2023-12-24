@@ -3,6 +3,7 @@ using Api.Entities;
 using Api.Features.Account;
 using Api.Features.Account.GetAllAccounts;
 using AccountData = Api.Features.Account.GetAllAccounts.GetAllAccountsHandler.AccountData;
+using CreatedAccountData = Api.Features.Account.CreateAccount.CreateAccountHandler.CreatedAccountData;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Repositories;
@@ -19,7 +20,6 @@ public class AccountRepository : IAccountRepository
     public async Task<IEnumerable<AccountData>> GetAllAccountsAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Accounts
-            .Where(acc => acc.IsDeleted == false)
             .OrderBy(acc => acc.CreatedAt)
             .Select(acc => new GetAllAccountsHandler.AccountData(acc.Status)
             {
@@ -31,11 +31,11 @@ public class AccountRepository : IAccountRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Guid> CreateAccountAsync(Account account, CancellationToken cancellationToken = default)
+    public async Task<CreatedAccountData> CreateAccountAsync(Account account, CancellationToken cancellationToken = default)
     {
         var addedResult = await _context.Accounts.AddAsync(account, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        return addedResult.Entity.Id;
+        return new CreatedAccountData(addedResult.Entity.Id);
     }
 
     public async Task<bool> IsNameUniqueAsync(string name, CancellationToken cancellationToken = default)
