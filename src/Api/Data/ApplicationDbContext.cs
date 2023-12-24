@@ -34,9 +34,6 @@ public class ApplicationDbContext : DbContext
 
             et.Property(et => et.UpdatedAt)
                 .HasColumnName("updated_at");
-
-            et.Property(et => et.IsDeleted)
-                .HasColumnName("is_deleted");
         });
 
         modelBuilder.Entity<Account>(e =>
