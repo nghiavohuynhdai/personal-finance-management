@@ -12,7 +12,8 @@ public class CreateAccountEndpoint
             .MapPost("", CreateAccount)
             .WithName(nameof(CreateAccount))
             .WithOpenApi()
-            .Produces<ResultResponse<CreatedAccountData>>(StatusCodes.Status201Created);
+            .Produces<ResultResponse<CreatedAccountData>>(StatusCodes.Status201Created)
+            .Produces<ResultResponse<object>>(StatusCodes.Status400BadRequest);
     }
 
     private static async Task<IResult> CreateAccount(
