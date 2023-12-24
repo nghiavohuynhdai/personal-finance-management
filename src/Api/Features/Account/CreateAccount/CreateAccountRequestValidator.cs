@@ -8,7 +8,7 @@ public class CreateAccountRequestValidator : AbstractValidator<CreateAccountRequ
     {
         RuleFor(acc => acc.Name)
             .MustAsync(async (name, cancellationToken) => await repository.IsNameUniqueAsync(name, cancellationToken))
-            .WithMessage("Account name is already used");
+            .WithMessage("Account is exists");
 
         RuleFor(acc => acc.Balance)
             .Must(balance => balance >= 0)
