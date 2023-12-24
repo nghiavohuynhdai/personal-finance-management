@@ -1,4 +1,5 @@
 using Api.Features.Account.CreateAccount;
+using Api.Features.Account.GetAllAccounts;
 
 namespace Api.Features.Account;
 
@@ -8,5 +9,6 @@ public static class AccountEndpoints
     {
         var accountGroupBuilder = groupBuilder.MapGroup("accounts").WithTags("Account");
         CreateAccountEndpoint.Map(accountGroupBuilder);
+        GetAllAccountsEndpoint.Map(accountGroupBuilder);
     }
 }
