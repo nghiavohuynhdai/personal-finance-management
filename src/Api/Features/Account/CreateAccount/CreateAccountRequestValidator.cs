@@ -7,15 +7,21 @@ public class CreateAccountRequestValidator : AbstractValidator<CreateAccountRequ
     public CreateAccountRequestValidator(IAccountRepository repository)
     {
         RuleFor(acc => acc.Name)
+            .NotNull()
+            .WithMessage("Account name is required")
+            .Length(3, 100)
+            .WithMessage("Account name must be between 3 and 100 characters")
             .MustAsync(async (name, cancellationToken) => await repository.IsNameUniqueAsync(name, cancellationToken))
             .WithMessage("Account is exists");
 
         RuleFor(acc => acc.Balance)
-            .Must(balance => balance >= 0)
+            .GreaterThanOrEqualTo(0)
+            .LessThanOrEqualTo(1000000000000)
             .WithMessage("Balance must be greater than or equal to 0");
 
         RuleFor(acc => acc.TotalLoan)
-            .Must(totalLoan => totalLoan >= 0)
+            .GreaterThanOrEqualTo(0)
+            .LessThanOrEqualTo(1000000000000)
             .WithMessage("Total loan must be greater than or equal to 0");
     }
 }
