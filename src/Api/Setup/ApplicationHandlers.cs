@@ -1,3 +1,4 @@
+using Api.Features.Account.ChangeAccountStatus;
 using Api.Features.Account.CreateAccount;
 using Api.Features.Account.GetAccountDetail;
 using Api.Features.Account.GetAllAccounts;
@@ -11,6 +12,7 @@ public static class ApplicationHandlers
         service.AddTransient<CreateAccountHandler>();
         service.AddTransient<GetAllAccountsHandler>();
         service.AddTransient<GetAccountDetailHandler>();
+        service.AddTransient<ChangeAccountStatusHandler>();
         return service;
     }
 }

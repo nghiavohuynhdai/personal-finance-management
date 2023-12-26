@@ -1,3 +1,4 @@
+using Api.Features.Account.ChangeAccountStatus;
 using Api.Features.Account.CreateAccount;
 using Api.Features.Account.GetAccountDetail;
 using Api.Features.Account.GetAllAccounts;
@@ -12,5 +13,6 @@ public static class AccountEndpoints
         CreateAccountEndpoint.Map(accountGroupBuilder);
         GetAllAccountsEndpoint.Map(accountGroupBuilder);
         GetAccountDetailEndpoint.Map(accountGroupBuilder);
+        ChangeAccountStatusEndpoint.Map(accountGroupBuilder);
     }
 }

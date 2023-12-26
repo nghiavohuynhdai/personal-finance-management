@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using static Api.Features.Account.GetAllAccounts.GetAllAccountsHandler;
 using static Api.Features.Account.CreateAccount.CreateAccountHandler;
 using static Api.Features.Account.GetAccountDetail.GetAccountDetailHandler;
+using Api.Common;
 
 namespace Api.Repositories;
 
@@ -57,5 +58,17 @@ public class AccountRepository : IAccountRepository
     public async Task<bool> IsNameUniqueAsync(string name, CancellationToken cancellationToken = default)
     {
         return !await _context.Accounts.AnyAsync(acc => acc.Name == name, cancellationToken);
+    }
+
+    public async Task<bool> IsAccountExistAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Accounts.AnyAsync(acc => acc.Id == id, cancellationToken);
+    }
+
+    public async Task ChangeAccountStatusAsync(Guid id, AccountStatus status, CancellationToken cancellationToken = default)
+    {
+        await _context.Accounts.
+        Where(acc => acc.Id == id).
+        ExecuteUpdateAsync(setPropertyCalls => setPropertyCalls.SetProperty(acc => acc.Status, status), cancellationToken);
     }
 }
