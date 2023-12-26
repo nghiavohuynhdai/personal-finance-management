@@ -36,6 +36,10 @@ public class GlobalExceptionHandlingMiddleware
                 code = HttpStatusCode.BadRequest;
                 message = badEx.Message;
                 break;
+            case NotFoundException notFoundEx:
+                code = HttpStatusCode.NotFound;
+                message = notFoundEx.Message;
+                break;
         }
 
         context.Response.ContentType = "application/json";

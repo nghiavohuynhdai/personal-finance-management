@@ -1,5 +1,5 @@
 using Api.Common;
-using AccountData = Api.Features.Account.GetAllAccounts.GetAllAccountsHandler.AccountData;
+using static Api.Features.Account.GetAllAccounts.GetAllAccountsHandler;
 
 namespace Api.Features.Account.GetAllAccounts;
 

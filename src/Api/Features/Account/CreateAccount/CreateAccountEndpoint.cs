@@ -1,7 +1,7 @@
 using System.Net;
 using Api.Common;
 using Microsoft.AspNetCore.Mvc;
-using CreatedAccountData = Api.Features.Account.CreateAccount.CreateAccountHandler.CreatedAccountData;
+using static Api.Features.Account.CreateAccount.CreateAccountHandler;
 
 namespace Api.Features.Account.CreateAccount;
 
