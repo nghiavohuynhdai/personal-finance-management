@@ -1,4 +1,5 @@
 using Api.Data;
+using Api.Data.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -6,7 +7,7 @@ namespace Api.Setup;
 
 public static class ApplicationDatabases
 {
-    public static IServiceCollection AddDatabases
+    public static IServiceCollection AddData
         (this IServiceCollection service)
     {
         service.AddDbContext<ApplicationDbContext>(options =>
@@ -17,6 +18,9 @@ public static class ApplicationDatabases
                     builder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "personal_finance_management");
                 });
         });
+
+        service.AddScoped<IUnitOfWork, UnitOfWork>();
+
         return service;
     }
     

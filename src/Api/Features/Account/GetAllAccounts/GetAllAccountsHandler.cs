@@ -1,4 +1,5 @@
 using Api.Common;
+using Api.Data.UnitOfWork;
 
 namespace Api.Features.Account.GetAllAccounts;
 
@@ -6,9 +7,9 @@ public class GetAllAccountsHandler
 {
     private readonly IAccountRepository _repository;
 
-    public GetAllAccountsHandler(IAccountRepository repository)
+    public GetAllAccountsHandler(IUnitOfWork unitOfWork)
     {
-        _repository = repository;
+        _repository = unitOfWork.AccountRepository;
     }
 
     public async Task<IEnumerable<AccountData>> Handle(CancellationToken cancellationToken)

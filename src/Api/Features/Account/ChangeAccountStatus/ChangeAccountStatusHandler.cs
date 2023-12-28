@@ -1,4 +1,5 @@
 using Api.Common;
+using Api.Data.UnitOfWork;
 using Api.Exceptions;
 using FluentValidation;
 
@@ -7,18 +8,20 @@ namespace Api.Features.Account.ChangeAccountStatus;
 public class ChangeAccountStatusHandler
 {
     private readonly IAccountRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<ChangeAccountStatusRequest> _validator;
 
-    public ChangeAccountStatusHandler(IAccountRepository repository, IValidator<ChangeAccountStatusRequest> validator)
+    public ChangeAccountStatusHandler(IUnitOfWork unitOfWork, IValidator<ChangeAccountStatusRequest> validator)
     {
-        _repository = repository;
+        _repository = unitOfWork.AccountRepository;
+        _unitOfWork = unitOfWork;
         _validator = validator;
     }
     public async Task<ChangedAccountStatusData> Handle(ChangeAccountStatusRequest request, CancellationToken cancellationToken)
     {
         await ValidateRequest(request, cancellationToken);
 
-        await _repository.ChangeAccountStatusAsync(request.Id, Enum.Parse<AccountStatus>(request.Status), cancellationToken);
+        await ChangeAccountStatus(request, cancellationToken);
 
         return new ChangedAccountStatusData(request.Id);
     }
@@ -30,11 +33,20 @@ public class ChangeAccountStatusHandler
         {
             throw new BadRequestException(validatedResult.Errors[0].ErrorMessage);
         }
+    }
 
-        if (!await _repository.IsAccountExistAsync(request.Id, cancellationToken))
+    private async Task ChangeAccountStatus(ChangeAccountStatusRequest request, CancellationToken cancellationToken)
+    {
+        var account = await _repository.GetAccountByIdAsync(request.Id, cancellationToken);
+
+        if (account is null)
         {
-            throw new NotFoundException("Account not found");
+            throw new NotFoundException($"Account with id {request.Id} not found");
         }
+
+        _repository.ChangeAccountStatus(account, Enum.Parse<AccountStatus>(request.Status));
+
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 
     public record ChangedAccountStatusData(Guid Id);

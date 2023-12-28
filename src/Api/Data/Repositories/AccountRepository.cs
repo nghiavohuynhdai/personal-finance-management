@@ -51,7 +51,6 @@ public class AccountRepository : IAccountRepository
     public async Task<CreatedAccountData> CreateAccountAsync(Account account, CancellationToken cancellationToken = default)
     {
         var addedResult = await _context.Accounts.AddAsync(account, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
         return new CreatedAccountData(addedResult.Entity.Id);
     }
 
@@ -60,15 +59,15 @@ public class AccountRepository : IAccountRepository
         return !await _context.Accounts.AnyAsync(acc => acc.Name == name, cancellationToken);
     }
 
-    public async Task<bool> IsAccountExistAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Account?> GetAccountByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Accounts.AnyAsync(acc => acc.Id == id, cancellationToken);
+        return await _context.Accounts
+            .AsNoTracking()
+            .FirstOrDefaultAsync(acc => acc.Id == id, cancellationToken);
     }
 
-    public async Task ChangeAccountStatusAsync(Guid id, AccountStatus status, CancellationToken cancellationToken = default)
+    public void ChangeAccountStatus(Account account, AccountStatus status)
     {
-        await _context.Accounts.
-        Where(acc => acc.Id == id).
-        ExecuteUpdateAsync(setPropertyCalls => setPropertyCalls.SetProperty(acc => acc.Status, status), cancellationToken);
+        _context.Accounts.Attach(account).Entity.Status = status;
     }
 }

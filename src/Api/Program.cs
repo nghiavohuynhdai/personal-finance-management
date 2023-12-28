@@ -18,8 +18,7 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services
-    .AddDatabases()
-    .AddRepositories()
+    .AddData()
     .AddValidatorsFromAssembly(typeof(Program).Assembly)
     .AddHandlers();
 

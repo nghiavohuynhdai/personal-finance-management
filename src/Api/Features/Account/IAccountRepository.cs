@@ -11,6 +11,6 @@ public interface IAccountRepository
     Task<AccountDetailData?> GetAccountDetailAsync(Guid id, CancellationToken cancellationToken = default);
     Task<CreatedAccountData> CreateAccountAsync(Entities.Account account, CancellationToken cancellationToken = default);
     Task<bool> IsNameUniqueAsync(string name, CancellationToken cancellationToken = default);
-    Task<bool> IsAccountExistAsync(Guid id, CancellationToken cancellationToken = default);
-    Task ChangeAccountStatusAsync(Guid id, AccountStatus status, CancellationToken cancellationToken = default);
+    Task<Entities.Account?> GetAccountByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    void ChangeAccountStatus(Entities.Account account, AccountStatus status);
 }

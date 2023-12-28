@@ -1,17 +1,18 @@
+using Api.Data.UnitOfWork;
 using FluentValidation;
 
 namespace Api.Features.Account.CreateAccount;
 
 public class CreateAccountRequestValidator : AbstractValidator<CreateAccountRequest>
 {
-    public CreateAccountRequestValidator(IAccountRepository repository)
+    public CreateAccountRequestValidator(IUnitOfWork unitOfWork)
     {
         RuleFor(acc => acc.Name)
             .NotNull()
             .WithMessage("Account name is required")
             .Length(3, 100)
             .WithMessage("Account name must be between 3 and 100 characters")
-            .MustAsync(async (name, cancellationToken) => await repository.IsNameUniqueAsync(name, cancellationToken))
+            .MustAsync(async (name, cancellationToken) => await unitOfWork.AccountRepository.IsNameUniqueAsync(name, cancellationToken))
             .WithMessage("Account is exists");
 
         RuleFor(acc => acc.Balance)

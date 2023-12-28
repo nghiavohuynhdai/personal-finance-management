@@ -1,4 +1,5 @@
 using Api.Common;
+using Api.Data.UnitOfWork;
 
 namespace Api.Features.Account.GetAccountDetail;
 
@@ -6,9 +7,9 @@ public class GetAccountDetailHandler
 {
     private readonly IAccountRepository _repository;
 
-    public GetAccountDetailHandler(IAccountRepository repository)
+    public GetAccountDetailHandler(IUnitOfWork unitOfWork)
     {
-        _repository = repository;
+        _repository = unitOfWork.AccountRepository;
     }
 
     public async Task<AccountDetailData?> Handle(Guid id, CancellationToken cancellationToken)
