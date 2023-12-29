@@ -1,4 +1,5 @@
 using Api.Features.Account;
+using Api.Features.Category;
 
 namespace Api.Setup;
 
@@ -8,5 +9,6 @@ public static class ApplicationEndpoints
     {
         var groupBuilder = builder.MapGroup("api");
         AccountEndpoints.Map(groupBuilder);
+        CategoryEndpoints.Map(groupBuilder);
     }
 }

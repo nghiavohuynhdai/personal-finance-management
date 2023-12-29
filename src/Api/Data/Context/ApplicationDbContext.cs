@@ -12,6 +12,7 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,6 +64,25 @@ public class ApplicationDbContext : DbContext
                 .HasColumnType("varchar(20)")
                 .HasConversion<string>()
                 .IsRequired();
+        });
+
+        modelBuilder.Entity<Category>(e =>
+        {
+            e.ToTable("categories");
+
+            e.Property(cat => cat.Type)
+                .HasColumnName("type")
+                .HasColumnType("varchar(20)")
+                .HasConversion<string>()
+                .IsRequired();
+
+            e.Property(cat => cat.Name)
+                .HasColumnName("name")
+                .HasColumnType("varchar(30)")
+                .IsRequired();
+
+            e.HasIndex(cat => new { cat.Name, cat.Type })
+                .IsUnique();
         });
     }
 

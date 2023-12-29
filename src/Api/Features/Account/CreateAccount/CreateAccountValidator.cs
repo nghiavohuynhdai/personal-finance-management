@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Api.Features.Account.CreateAccount;
 
-public class CreateAccountRequestValidator : AbstractValidator<CreateAccountRequest>
+public class CreateAccountValidator : AbstractValidator<CreateAccountRequest>
 {
-    public CreateAccountRequestValidator(IUnitOfWork unitOfWork)
+    public CreateAccountValidator(IUnitOfWork unitOfWork)
     {
         RuleFor(acc => acc.Name)
             .NotNull()

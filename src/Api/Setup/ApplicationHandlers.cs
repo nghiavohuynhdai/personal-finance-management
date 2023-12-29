@@ -2,6 +2,7 @@ using Api.Features.Account.ChangeAccountStatus;
 using Api.Features.Account.CreateAccount;
 using Api.Features.Account.GetAccountDetail;
 using Api.Features.Account.GetAllAccounts;
+using Api.Features.Category.CreateCategory;
 
 namespace Api.Setup;
 
@@ -13,6 +14,7 @@ public static class ApplicationHandlers
         service.AddTransient<GetAllAccountsHandler>();
         service.AddTransient<GetAccountDetailHandler>();
         service.AddTransient<ChangeAccountStatusHandler>();
+        service.AddTransient<CreateCategoryHandler>();
         return service;
     }
 }

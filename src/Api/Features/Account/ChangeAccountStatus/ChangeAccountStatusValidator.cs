@@ -13,7 +13,9 @@ public class ChangeAccountStatusValidator : AbstractValidator<ChangeAccountStatu
             .WithMessage("Id is required");
 
         RuleFor(request => request.Status)
+            .NotNull()
+            .WithMessage("Account status is required")
             .IsEnumName(typeof(AccountStatus))
-            .WithMessage("Status is invalid");
+            .WithMessage("Account status is invalid");
     }
 }

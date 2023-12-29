@@ -1,4 +1,6 @@
+using Api.Data.Repositories;
 using Api.Features.Account;
+using Api.Features.Category;
 using Api.Repositories;
 
 namespace Api.Data.UnitOfWork
@@ -8,6 +10,8 @@ namespace Api.Data.UnitOfWork
         private readonly ApplicationDbContext _context;
 
         private IAccountRepository? _accountRepository;
+
+        private ICategoryRepository? _categoryRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -22,6 +26,17 @@ namespace Api.Data.UnitOfWork
                     _accountRepository = new AccountRepository(_context);
 
                 return _accountRepository;
+            }
+        }
+
+        public ICategoryRepository CategoryRepository
+        {
+            get
+            {
+                if (_categoryRepository == null)
+                    _categoryRepository = new CategoryRepository(_context);
+
+                return _categoryRepository;
             }
         }
 

@@ -7,10 +7,12 @@ namespace Api.Middlewares;
 public class GlobalExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
 
-    public GlobalExceptionHandlingMiddleware(RequestDelegate next)
+    public GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlingMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -25,12 +27,12 @@ public class GlobalExceptionHandlingMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+    private Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         var code = HttpStatusCode.InternalServerError;
         var message = "Service is unavailable";
 
-        switch (ex)
+        switch(ex)
         {
             case BadRequestException badEx:
                 code = HttpStatusCode.BadRequest;
@@ -39,6 +41,9 @@ public class GlobalExceptionHandlingMiddleware
             case NotFoundException notFoundEx:
                 code = HttpStatusCode.NotFound;
                 message = notFoundEx.Message;
+                break;
+            default:
+                _logger.LogError(ex, "Unhandled exception");
                 break;
         }
 
