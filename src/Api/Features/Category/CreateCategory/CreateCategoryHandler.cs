@@ -1,7 +1,6 @@
 using Api.Common;
 using Api.Data.UnitOfWork;
 using Api.Exceptions;
-using Api.Features.Account;
 using FluentValidation;
 
 namespace Api.Features.Category.CreateCategory;
