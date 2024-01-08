@@ -8,6 +8,7 @@ public class CreateAccountValidator : AbstractValidator<CreateAccountRequest>
     public CreateAccountValidator(IUnitOfWork unitOfWork)
     {
         RuleFor(acc => acc.Name)
+            .Cascade(CascadeMode.Stop)
             .NotNull()
             .WithMessage("Account name is required")
             .Length(3, 100)
@@ -16,11 +17,13 @@ public class CreateAccountValidator : AbstractValidator<CreateAccountRequest>
             .WithMessage("Account is exists");
 
         RuleFor(acc => acc.Balance)
+            .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0)
             .LessThanOrEqualTo(1000000000000)
             .WithMessage("Balance must be greater than or equal to 0");
 
         RuleFor(acc => acc.TotalLoan)
+            .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0)
             .LessThanOrEqualTo(1000000000000)
             .WithMessage("Total loan must be greater than or equal to 0");

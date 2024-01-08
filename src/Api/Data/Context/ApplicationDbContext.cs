@@ -3,7 +3,7 @@ using Api.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 
-namespace Api.Data;
+namespace Api.Data.Context;
 
 public class ApplicationDbContext : DbContext
 {
@@ -13,6 +13,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,6 +84,38 @@ public class ApplicationDbContext : DbContext
 
             e.HasIndex(cat => new { cat.Name, cat.Type })
                 .IsUnique();
+        });
+
+        modelBuilder.Entity<Transaction>(e =>
+        {
+            e.ToTable("transactions");
+
+            e.Property(trans => trans.Type)
+                .HasColumnName("type")
+                .HasColumnType("varchar(20)")
+                .HasConversion<string>()
+                .IsRequired();
+
+            e.Property(trans => trans.Description)
+                .HasColumnName("description")
+                .HasColumnType("text")
+                .HasMaxLength(500);
+
+            e.Property(trans => trans.Amount)
+                .HasColumnName("amount")
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
+
+            e.Property(trans => trans.Time)
+                .HasColumnName("time")
+                .IsRequired();
+
+            e.Property(trans => trans.AccountId)
+                .HasColumnName("account_id")
+                .IsRequired();
+
+            e.Property(trans => trans.CategoryId)
+                .HasColumnName("category_id");
         });
     }
 

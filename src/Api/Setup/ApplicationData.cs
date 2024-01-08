@@ -1,4 +1,4 @@
-using Api.Data;
+using Api.Data.Context;
 using Api.Data.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;

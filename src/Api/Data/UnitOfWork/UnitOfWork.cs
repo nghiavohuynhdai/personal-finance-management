@@ -1,7 +1,6 @@
+using Api.Data.Context;
 using Api.Data.Repositories;
-using Api.Features.Account;
-using Api.Features.Category;
-using Api.Repositories;
+using Api.Data.Repositories.Interfaces;
 
 namespace Api.Data.UnitOfWork
 {
@@ -12,6 +11,8 @@ namespace Api.Data.UnitOfWork
         private IAccountRepository? _accountRepository;
 
         private ICategoryRepository? _categoryRepository;
+        
+        private ITransactionRepository? _transactionRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -37,6 +38,17 @@ namespace Api.Data.UnitOfWork
                     _categoryRepository = new CategoryRepository(_context);
 
                 return _categoryRepository;
+            }
+        }
+        
+        public ITransactionRepository TransactionRepository
+        {
+            get
+            {
+                if (_transactionRepository == null)
+                    _transactionRepository = new TransactionRepository(_context);
+
+                return _transactionRepository;
             }
         }
 

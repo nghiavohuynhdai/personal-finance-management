@@ -1,5 +1,4 @@
-using Api.Features.Account;
-using Api.Features.Category;
+using Api.Data.Repositories.Interfaces;
 
 namespace Api.Data.UnitOfWork
 {
@@ -7,6 +6,7 @@ namespace Api.Data.UnitOfWork
     {
         IAccountRepository AccountRepository { get; }
         ICategoryRepository CategoryRepository { get; }
+        ITransactionRepository TransactionRepository { get; }
         void Commit();
         void Rollback();
         Task CommitAsync(CancellationToken cancellationToken = default);

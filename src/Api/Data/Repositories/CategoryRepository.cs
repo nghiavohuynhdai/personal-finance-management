@@ -1,9 +1,8 @@
 using Api.Common;
+using Api.Data.Context;
+using Api.Data.Repositories.Interfaces;
 using Api.Entities;
-using Api.Features.Category;
-using Api.Features.Category.GetAllCategory;
 using Microsoft.EntityFrameworkCore;
-using static Api.Features.Category.CreateCategory.CreateCategoryHandler;
 using static Api.Features.Category.GetAllCategory.GetAllCategoryHandler;
 
 namespace Api.Data.Repositories;
@@ -16,13 +15,13 @@ public class CategoryRepository : ICategoryRepository
     {
         _context = context;
     }
-    public async Task<CreatedCategoryData> CreateCategoryAsync(Category category, CancellationToken cancellationToken)
+    public async Task<Guid> CreateCategoryAsync(Category category, CancellationToken cancellationToken)
     {
         var addedResult = await _context.Categories.AddAsync(category);
-        return new CreatedCategoryData(addedResult.Entity.Id);
+        return addedResult.Entity.Id;
     }
 
-    public async Task<IEnumerable<GetAllCategoryHandler.CategoryData>> GetAllCategoryAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CategoryData>> GetAllCategoryAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Categories
             .Select(cat => new CategoryData(cat.Type)
@@ -31,6 +30,13 @@ public class CategoryRepository : ICategoryRepository
                 Name = cat.Name
             })
         .ToListAsync(cancellationToken);
+    }
+
+    public IQueryable<Category> GetCategoryById(Guid id)
+    {
+        return _context.Categories
+            .AsNoTracking()
+            .Where(cat => cat.Id == id);
     }
 
     public async Task<bool> IsNameAndTypeUniqueAsync(string name, CategoryType type, CancellationToken cancellationToken = default)

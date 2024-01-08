@@ -1,7 +1,9 @@
 using Api.Common;
+using Api.Data.Repositories.Interfaces;
 using Api.Data.UnitOfWork;
 using Api.Exceptions;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Features.Account.ChangeAccountStatus;
 
@@ -37,14 +39,10 @@ public class ChangeAccountStatusHandler
 
     private async Task ChangeAccountStatus(ChangeAccountStatusRequest request, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetAccountByIdAsync(request.Id, cancellationToken);
+        var account = await _repository.GetAccountById(request.Id)
+            .SingleOrDefaultAsync(cancellationToken);
 
-        if (account is null)
-        {
-            throw new NotFoundException($"Account with id {request.Id} not found");
-        }
-
-        _repository.ChangeAccountStatus(account, Enum.Parse<AccountStatus>(request.Status));
+        _repository.ChangeAccountStatus(account!, Enum.Parse<AccountStatus>(request.Status));
 
         await _unitOfWork.CommitAsync(cancellationToken);
     }

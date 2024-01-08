@@ -1,4 +1,5 @@
 using Api.Common;
+using Api.Data.Repositories.Interfaces;
 using Api.Data.UnitOfWork;
 
 namespace Api.Features.Account.GetAllAccounts;

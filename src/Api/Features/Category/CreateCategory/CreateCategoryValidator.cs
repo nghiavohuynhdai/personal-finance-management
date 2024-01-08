@@ -1,20 +1,21 @@
 using Api.Common;
-using Api.Data.UnitOfWork;
 using FluentValidation;
 
 namespace Api.Features.Category.CreateCategory;
 
 public class CreateCategoryValidator : AbstractValidator<CreateCategoryRequest>
 {
-    public CreateCategoryValidator(IUnitOfWork unitOfWork)
+    public CreateCategoryValidator()
     {
         RuleFor(cat => cat.Type)
+            .Cascade(CascadeMode.Stop)
             .NotNull()
             .WithMessage("Category type is required")
             .IsEnumName(typeof(CategoryType))
             .WithMessage("Category type is invalid");
 
         RuleFor(cat => cat.Name)
+            .Cascade(CascadeMode.Stop)
             .NotNull()
             .WithMessage("Category name is required")
             .Length(3, 30)

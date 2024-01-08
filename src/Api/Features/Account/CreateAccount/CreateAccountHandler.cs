@@ -1,3 +1,4 @@
+using Api.Data.Repositories.Interfaces;
 using Api.Data.UnitOfWork;
 using Api.Exceptions;
 using FluentValidation;
@@ -42,9 +43,9 @@ public class CreateAccountHandler
             TotalLoan = request.TotalLoan
         };
 
-        var createdAccountData = await _repository.CreateAccountAsync(account, cancellationToken);
+        var id = await _repository.CreateAccountAsync(account, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
-        return createdAccountData;
+        return new CreatedAccountData(id);
     }
 
     public record CreatedAccountData(Guid Id);

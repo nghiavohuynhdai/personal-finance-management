@@ -1,4 +1,5 @@
 using Api.Common;
+using Api.Data.Repositories.Interfaces;
 using Api.Data.UnitOfWork;
 using Api.Exceptions;
 using FluentValidation;
@@ -34,14 +35,14 @@ public class CreateCategoryHandler
             throw new BadRequestException(validatedResult.Errors[0].ErrorMessage);
         }
 
-        var IsNameAndTypeUnique = await _repository.IsNameAndTypeUniqueAsync
+        var isNameAndTypeUnique = await _repository.IsNameAndTypeUniqueAsync
         (
             request.Name,
             Enum.Parse<CategoryType>(request.Type),
             cancellationToken
         );
-
-        if (!IsNameAndTypeUnique)
+        
+        if (!isNameAndTypeUnique)
         {
             throw new BadRequestException("Category name is exists");
         }
@@ -55,9 +56,9 @@ public class CreateCategoryHandler
             Type = Enum.Parse<CategoryType>(request.Type)
         };
 
-        var createdCategoryData = await _repository.CreateCategoryAsync(category, cancellationToken);
+        var id = await _repository.CreateCategoryAsync(category, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
-        return createdCategoryData;
+        return new CreatedCategoryData(id);
     }
 
     public record CreatedCategoryData(Guid Id);
